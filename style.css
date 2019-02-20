@@ -1,0 +1,81 @@
+@font-face { font-family: Oswald; src: url('Oswald-Bold.ttf'); }
+
+html{
+}
+
+body{
+  margin: 0;
+  background-color: #000000;
+}
+
+#main{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.nav{
+  font-weight: normal;
+  font-size: 0.8em;
+}
+
+.nav button{
+  padding: 50px 10px 50px 10px;
+  line-height: 25%;
+}
+
+#previous{
+  position: fixed;
+  top: 40%;
+  left: 2%;
+}
+
+#next{
+  position: fixed;
+  top: 40%;
+  right: 2%;
+}
+
+#viz{
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
+
+#toggle{
+  background-color: #111111;
+  border-radius: 100%;
+  width: 60px;
+  height: 60px;
+}
+
+#cnv{
+  margin-top: 12%;
+  height: 100%;
+  margin-bottom: 12%;
+}
+
+canvas{
+  background-color: #000000;
+}
+
+#buttons{
+  display: flex;
+  width: 50%;
+  justify-content: space-around;
+}
+
+button{
+  background-color: #000000;
+  color: #444444;
+  border: none;
+  width: 80px;
+  height: 50px;
+  font-size: 2em;
+  font-weight: bold;
+}
+
+button:focus{
+  outline: none;
+}
