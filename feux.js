@@ -179,13 +179,14 @@ function drawLeftPart(feu){
 }
 
 function displayText(feu){
-  ctx.font = `bold ${24*percent()}px Oswald`
+  const fontSize = 24 * percent()
+  ctx.font = `bold ${fontSize}px Oswald`
   ctx.fillStyle = (feu.state() === GREEN) ? greenColor : redColor
   let remaining = 1 - feu.subcyclePosition()
   remaining *= (feu.state() === GREEN) ? feu.green/1000 : feu.red/1000
   const text = `${Math.ceil(remaining)}s`
-  const textWidth = ctx.measureText(text).width
-  ctx.fillText(text, (canvas.width-textWidth)/2, canvas.height/2*1.17)
+  const textDimension = ctx.measureText(text)
+  ctx.fillText(text, (canvas.width-textDimension.width)/2, (canvas.height+fontSize*0.75)/2)
 }
 
 function displayId(feu){
