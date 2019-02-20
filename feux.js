@@ -1,5 +1,6 @@
 const SECOND = 1000
 const CORRECTION = -0.5*Math.PI
+
 const GREEN = 1
 const RED = 0
 
@@ -13,14 +14,56 @@ const H = 72
 
 const NOMBRE_FEUX = 5
 
+const ALL = 0
+const SIMPLE = 1
+const NOTHING = 2
+
+let mode = ALL
+
 const redColor = "#CF0000"
 const greenColor = "#00CF00"
 const blackColor = "000000"
 
-function Feu(id, vert, rouge){
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext("2d")
+ctx.font = "bold 100px Oswald";
+
+const feux = []
+for (let i = 0; i < 5; i++) feux.push(new Feu(i+1, 0, 0))
+let current = 0
+
+const prevBtn = document.getElementById("previous")
+const nextBtn = document.getElementById("next")
+const rBtn = document.getElementById("red-btn")
+const startBtn = document.getElementById("start-btn")
+const gBtn = document.getElementById("green-btn")
+const toggleBtn = document.getElementById("toggle")
+const buttons = document.getElementById("buttons")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function Feu(id){
   this.id = id
-  this.red = rouge * SECOND
-  this.green = vert * SECOND
+  this.red = null
+  this.green = null
   this.startGreen = null
 }
 
@@ -67,12 +110,6 @@ Feu.prototype.subcyclePosition = function(){
 Feu.prototype.state = function(){
   const cyclePosition = this.cyclePosition()
   return (cyclePosition < this.greenRatio()) ? GREEN : RED
-}
-
-Feu.prototype.log = function(){
-  const state = this.state()
-  const subPos = this.subcyclePosition()
-  console.log(`${(state === GREEN) ? "VERT" : "ROUGE"} | ${this.cyclePosition()} | ${subPos}`)
 }
 
 
@@ -179,6 +216,42 @@ function draw(feu){
   leanAnimation(feu)
 }
 
+function step(timestamp) {
+  if (!start) start = timestamp;
+  var progress = timestamp - start;
+  draw(feux[current])
+  window.requestAnimationFrame(step);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function getSetRed(){
   const r = prompt("Durée du rouge (+ orange)")
   if (r) feux[current].setRed(r)
@@ -189,66 +262,25 @@ function getSetGreen(){
   if (g) feux[current].setGreen(g)
 }
 
-var start = null;
-var canvas = document.getElementById('canvas');
-var ctx = canvas.getContext("2d")
-ctx.font = "bold 100px Oswald";
+const next = () => (current < NOMBRE_FEUX - 1) ? current++ : null
+const previous = () => (current > 0) ? current-- : null
 
-function step(timestamp) {
-  if (!start) start = timestamp;
-  var progress = timestamp - start;
-  draw(feux[current])
-  window.requestAnimationFrame(step);
+
+const setClick = (btn, action) => btn.addEventListener("mousedown", action)
+
+const setUpButtons = () => {
+  setClick(prevBtn, previous)
+  setClick(nextBtn, next)
+  setClick(rBtn, getSetRed)
+  setClick(startBtn, start)
+  setClick(gBtn, getSetGreen)
+  setClick(toggleBtn, toggleIHM)
 }
 
-
-const feux = []
-for (let i = 0; i < 5; i++) feux.push(new Feu(i+1, 0, 0))
-
-function next(){
-  if (current < NOMBRE_FEUX - 1) current++
-}
-
-function previous(){
-  if (current > 0) current--
-}
-
-let current = 0
-
-const rBtn = document.getElementById("red-btn")
-const gBtn = document.getElementById("green-btn")
-const nextBtn = document.getElementById("next")
-const prevBtn = document.getElementById("previous")
-const toggleBtn = document.getElementById("toggle")
-
-nextBtn.addEventListener("click", e =>{
-  next()
-})
-
-prevBtn.addEventListener("click", e =>{
-  previous()
-})
-
-
-rBtn.addEventListener("click", e =>{
-  getSetRed()
-})
-
-gBtn.addEventListener("click", e =>{
-  getSetGreen()
-})
-
-toggle.addEventListener("click", e =>{
-  toggleIHM()
-})
-
-window.addEventListener("click", e =>{
-  feux[current].start()
-})
+const start = () => feux[current].start()
 
 document.body.addEventListener("keydown", e => {
   const code = e.keyCode
-  console.log(code);
   if(code === SPACE) feux[current].start()
   if(code === RIGHT) next()
   if(code === LEFT) previous()
@@ -257,28 +289,48 @@ document.body.addEventListener("keydown", e => {
   if(code === H) toggleIHM()
 })
 
-const buttons = document.getElementById("buttons")
-let IHMdisplayed = true
+
+
+
+
+
+
+
+
+
+
+const viz = (elm, v) => elm.style.visibility = v
+const hide = elm => viz(elm, "hidden")
+const show = elm => viz(elm, "visible")
 
 function hideIHM(){
-  prevBtn.style.visibility = "hidden"
-  nextBtn.style.visibility = "hidden"
-  buttons.style.visibility = "hidden"
+  hide(prevBtn)
+  hide(nextBtn)
+  hide(buttons)
 }
 
-function showIHM(){
-  prevBtn.style.visibility = "visible"
-  nextBtn.style.visibility = "visible"
-  buttons.style.visibility = "visible"
+function displaySimpleIHM(){
+  hide(buttons)
+}
+
+function displayFullIHM(){
+  show(prevBtn)
+  show(nextBtn)
+  show(buttons)
 }
 
 function toggleIHM(){
-  if (IHMdisplayed) hideIHM()
-  else showIHM()
-  IHMdisplayed = !IHMdisplayed
+  if (++mode > NOTHING) mode = ALL
+  if (mode === ALL) displayFullIHM()
+  if (mode === SIMPLE) displaySimpleIHM()
+  if (mode === NOTHING) hideIHM()
 }
 
+
+
+
 function main(){
+  setUpButtons()
   window.requestAnimationFrame(step);
 }
 

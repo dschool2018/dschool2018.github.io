@@ -21,8 +21,9 @@ body{
 }
 
 .nav button{
-  padding: 50px 10px 50px 10px;
-  line-height: 25%;
+  background-color: #222222;
+  width: 40px;
+  height: 40px;
 }
 
 #previous{
@@ -67,11 +68,11 @@ canvas{
 }
 
 button{
-  background-color: #000000;
-  color: #444444;
+  background-color: #444444;
   border: none;
-  width: 80px;
-  height: 50px;
+  border-radius: 100%;
+  width: 30px;
+  height: 30px;
   font-size: 2em;
   font-weight: bold;
 }
