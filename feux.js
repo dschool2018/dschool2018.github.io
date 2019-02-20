@@ -193,7 +193,7 @@ function displayId(feu){
   ctx.font = `bold ${8*percent()}px Oswald`
   ctx.fillStyle = "#444444"
   const text = `#${feu.id}`
-  ctx.fillText(text, 25 * percent(), canvas.height - (20 * percent()))
+  ctx.fillText(text, canvas.width - 30 * percent(), canvas.height - (20 * percent()))
 }
 
 function drawCursor(feu){
