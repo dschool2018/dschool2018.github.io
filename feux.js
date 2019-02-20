@@ -24,12 +24,14 @@ const redColor = "#CF0000"
 const greenColor = "#00CF00"
 const blackColor = "000000"
 
-const canvas = document.getElementById('canvas');
+const canvas = document.getElementById('canvas')
 const ctx = canvas.getContext("2d")
-ctx.font = "bold 100px Oswald";
+ctx.canvas.width  = window.innerWidth;
+ctx.canvas.height = window.innerHeight;
+ctx.font = "bold 100px Oswald"
 
 const feux = []
-for (let i = 0; i < 5; i++) feux.push(new Feu(i+1, 0, 0))
+for (let i = 0; i < 5; i++) feux.push(new Feu(i+1))
 let current = 0
 
 const prevBtn = document.getElementById("previous")
@@ -81,7 +83,7 @@ Feu.prototype.cycle = function(){
 
 Feu.prototype.start = function () {
   this.startGreen = Date.now()
-};
+}
 
 Feu.prototype.elapsed = function(){ return Date.now() - this.startGreen}
 
@@ -138,10 +140,10 @@ Feu.prototype.state = function(){
 
 
 
-
+const percent = () => Math.min(canvas.width, canvas.height) / 100
 
 function clear(){
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
 }
 
 function drawCircle(x, y, radius){
@@ -153,12 +155,12 @@ function drawCircle(x, y, radius){
 function japanAnimation(feu){
   const radius = feu.subcyclePosition()
   ctx.fillStyle = (feu.state() === GREEN) ? greenColor : redColor
-  drawCircle(400, 300, (1-radius) * 200)
+  drawCircle(canvas.width/2, canvas.height/2, (1-radius) * 50 * percent())
 }
 
 function drawArc(x, y, start, end){
   ctx.beginPath()
-  ctx.arc(x, y, 150, start, end)
+  ctx.arc(x, y, 30 * percent(), start, end)
   ctx.stroke()
 }
 
@@ -166,31 +168,31 @@ function drawGreenPart(feu){
   const start = CORRECTION
   const end = feu.greenRatio() * 2 * Math.PI + CORRECTION
   ctx.strokeStyle = greenColor
-  drawArc(400, 300, start, end)
+  drawArc(canvas.width/2, canvas.height/2, start, end)
 }
 
 function drawLeftPart(feu){
   const start = feu.greenRatio() * 2 * Math.PI + CORRECTION
   const end = 2 * Math.PI + CORRECTION
   ctx.strokeStyle = redColor
-  drawArc(400, 300, start, end)
+  drawArc(canvas.width/2, canvas.height/2, start, end)
 }
 
 function displayText(feu){
-  ctx.font = "bold 100px Oswald";
+  ctx.font = `bold ${24*percent()}px Oswald`
   ctx.fillStyle = (feu.state() === GREEN) ? greenColor : redColor
   let remaining = 1 - feu.subcyclePosition()
   remaining *= (feu.state() === GREEN) ? feu.green/1000 : feu.red/1000
   const text = `${Math.ceil(remaining)}s`
   const textWidth = ctx.measureText(text).width
-  ctx.fillText(text, (canvas.width-textWidth)/2, 335);
+  ctx.fillText(text, (canvas.width-textWidth)/2, canvas.height/2*1.17)
 }
 
 function displayId(feu){
-  ctx.font = "bold 50px Oswald";
+  ctx.font = `bold ${8*percent()}px Oswald`
   ctx.fillStyle = "#444444"
   const text = `#${feu.id}`
-  ctx.fillText(text, 0, canvas.height - 100);
+  ctx.fillText(text, 25 * percent(), canvas.height - (20 * percent()))
 }
 
 function drawCursor(feu){
@@ -198,12 +200,12 @@ function drawCursor(feu){
   ctx.translate(canvas.width/2, canvas.height/2)
   ctx.rotate(feu.cyclePosition() * 2 * Math.PI + CORRECTION)
   ctx.fillStyle = "#FFFFFF"
-  drawCircle(250, 0, 12)
+  drawCircle(30*percent(), 0, 2.3*percent())
   ctx.restore()
 }
 
 function leanAnimation(feu){
-  ctx.lineWidth = 75;
+  ctx.lineWidth = 4 * percent()
   drawGreenPart(feu)
   drawLeftPart(feu)
   drawCursor(feu)
@@ -214,13 +216,19 @@ function leanAnimation(feu){
 function draw(feu){
   clear()
   leanAnimation(feu)
+  // japanAnimation(feu)
+}
+
+function resizeCanvas () {
+  canvas.width = canvas.parentNode.getBoundingClientRect().width
+  canvas.height = canvas.parentNode.getBoundingClientRect().height
 }
 
 function step(timestamp) {
-  if (!start) start = timestamp;
-  var progress = timestamp - start;
+  if (!start) start = timestamp
+  var progress = timestamp - start
   draw(feux[current])
-  window.requestAnimationFrame(step);
+  window.requestAnimationFrame(step)
 }
 
 
@@ -331,7 +339,9 @@ function toggleIHM(){
 
 function main(){
   setUpButtons()
-  window.requestAnimationFrame(step);
+  window.addEventListener('resize', resizeCanvas)
+  resizeCanvas()
+  window.requestAnimationFrame(step)
 }
 
-main()
+window.onload = main
