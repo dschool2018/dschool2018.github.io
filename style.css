@@ -33,14 +33,14 @@ body{
 
 #previous{
   position: fixed;
-  top: 40%;
-  left: 2%;
+  bottom: 150px;
+  left: 20px;
 }
 
 #next{
   position: fixed;
-  top: 40%;
-  right: 2%;
+  bottom: 150px;
+  right: 20px;
 }
 
 #viz{
@@ -72,7 +72,7 @@ canvas{
 #buttons button{
   margin: 0 10%;
   position: relative;
-  bottom: 50px;
+  bottom: 150px;
 }
 
 button{

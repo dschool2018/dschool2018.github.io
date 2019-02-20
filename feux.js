@@ -14,11 +14,11 @@ const H = 72
 
 const NOMBRE_FEUX = 5
 
-const ALL = 0
-const SIMPLE = 1
+const SETUP = 0
+const DEMO = 1
 const NOTHING = 2
 
-let mode = ALL
+let mode = NOTHING
 
 const redColor = "#CF0000"
 const greenColor = "#00CF00"
@@ -318,20 +318,22 @@ function hideIHM(){
   hide(buttons)
 }
 
-function displaySimpleIHM(){
+function setupIHM(){
+  show(buttons)
+  hide(prevBtn)
+  hide(nextBtn)
+}
+
+function demoIHM(){
+  show(prevBtn)
+  show(nextBtn)
   hide(buttons)
 }
 
-function displayFullIHM(){
-  show(prevBtn)
-  show(nextBtn)
-  show(buttons)
-}
-
 function toggleIHM(){
-  if (++mode > NOTHING) mode = ALL
-  if (mode === ALL) displayFullIHM()
-  if (mode === SIMPLE) displaySimpleIHM()
+  if (++mode > NOTHING) mode = SETUP
+  if (mode === SETUP) setupIHM()
+  if (mode === DEMO) demoIHM()
   if (mode === NOTHING) hideIHM()
 }
 
@@ -339,6 +341,7 @@ function toggleIHM(){
 
 
 function main(){
+  toggleIHM()
   setUpButtons()
   window.addEventListener('resize', resizeCanvas)
   resizeCanvas()
