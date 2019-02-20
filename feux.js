@@ -276,12 +276,13 @@ const previous = () => (current > 0) ? current-- : null
 
 
 const setClick = (btn, action) => btn.addEventListener("mousedown", action)
+const setClickUp = (btn, action) => btn.addEventListener("mouseup", action)
 
 const setUpButtons = () => {
   setClick(prevBtn, previous)
   setClick(nextBtn, next)
   setClick(rBtn, getSetRed)
-  setClick(startBtn, start)
+  setClickUp(startBtn, start)
   setClick(gBtn, getSetGreen)
   setClick(toggleBtn, toggleIHM)
 }
