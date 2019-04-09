@@ -1,0 +1,34 @@
+html{
+    margin: 0;
+    height: 100%;
+}
+
+body{
+    margin: 0px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+button{
+    height: 25%;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+#green-btn{
+    background-color: #5AE15A;
+}
+
+#orange-btn{
+    background-color: #F0F000;
+}
+
+#red-btn{
+    background-color: #F33232;;
+}
+
+#stop-btn{
+    background-color: #999;
+}
